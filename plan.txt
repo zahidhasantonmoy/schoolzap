@@ -1,0 +1,223 @@
+**The SchoolZap Development Bible**
+
+**Part 1: The Project Manifesto**
+
+*   **1.1. Project Vision: "Effortless Engagement"**
+    *   A detailed narrative explaining the core philosophy. We are building more than an LMS; we are building a communication bridge. The goal is to make every interaction—from a parent paying fees to a teacher grading an assignment—feel intuitive, calm, and satisfying. We are actively fighting against the cluttered, confusing, and stressful interfaces of traditional school management systems.
+*   **1.2. Target Audience Personas & User Roles (Expanded & Integrated)**
+    *   **The Main Admin (The Platform Owner / You)**
+        *   **Core Features:** Global Command Dashboard (Live Metrics, Recent Activity, User Growth Chart, Geographic Map), Tenant (School) Management, Subscription & Feature Management (The "Control Center"), Platform-Wide Announcements, Financials Dashboard, Central Support System.
+        *   **Workflow Example:** Onboarding and Upgrading a School.
+        *   **UI/UX Design Concept:** A professional, data-driven web application that feels like a modern SaaS business intelligence tool.
+        *   **Enhancement Suggestions:** Predictive Churn Analysis, Automated Trial-to-Paid Conversion, Sandbox Environments.
+    *   **The School Admin (The School's Manager)**
+        *   **Core Features:** School Operations Dashboard (At-a-glance stats, Quick Action Buttons, Upcoming Events, Approval Requests), User Management (Bulk Import/Export, Parent-Child Linking), Academics Setup, School Customization, Financial Module, Administrative Modules (Admissions, Payroll), Communication Hub.
+        *   **Workflow Example:** Starting a New School Year.
+        *   **UI/UX Design Concept:** Clean, organized, and task-oriented. Complex tasks are simplified into guided wizards.
+        *   **Enhancement Suggestions:** AI-Powered Timetable Generator, ID Card Generation, Inventory & Asset Management.
+    *   **The Teacher (The Heart of the System)**
+        *   **Core Features:** Personalized Teacher Dashboard (Today's Agenda), Classroom Hub (Assignments, Quizzes, Study Materials, Gradebook), Attendance, Communication.
+        *   **Workflow Example:** The Full Assignment Cycle.
+        *   **UI/UX Design Concept:** Mobile-first, bright, encouraging, and uses cards to represent tasks and assignments.
+        *   **Enhancement Suggestions:** AI Assistant for Teachers, Lesson Planner, Gamification.
+    *   **The Student & Parent (The End Users)**
+        *   **Core Features:** Student Dashboard (To-Do list), My Work, Classes, Profile. Parent Dashboard (Consolidated feed), Academic Insight, Effortless Communication, One-Tap Payments.
+        *   **Workflow Example:** The Concerned Parent.
+        *   **UI/UX Design Concept:** A modern consumer app (like a simplified Facebook feed or a wellness app).
+        *   **Enhancement Suggestions:** Collaborative Goal Setting, Real-time School Bus Tracking, Extracurricular & Club Hub.
+*   **1.3. Core Architectural Principles**
+    *   **Feature-First Architecture:** A deep dive into why this is crucial for long-term maintainability. Includes a visual representation of the directory structure.
+    *   **State Management with Riverpod:** An explanation of why Riverpod's compile-safe, provider-based approach is superior for this project. We will detail our strategy for using different provider types (`Provider`, `FutureProvider`, `StateNotifierProvider`).
+    *   **The Repository Pattern:** A clear diagram showing how the UI (widgets) talks to the Providers, which talk to the Repositories, which then talk to the Data Sources (Firebase). This abstraction is key to a testable and adaptable codebase.
+*   **1.4. UI/UX Design System**
+    *   **Color Palette:** Primary, secondary, accent, and semantic colors (for success, error, warning) will be defined with their hex codes.
+    *   **Typography:** The specific fonts (e.g., Inter for body, Poppins for headings), weights, and sizes for a clear visual hierarchy.
+    *   **Iconography:** The chosen icon pack (e.g., Material Icons, Feather Icons) and our philosophy for using icons to enhance clarity.
+    *   **Component Library:** A description of our core shared components (`CustomButton`, `CustomTextField`, `BentoGridCard`, etc.) and their design principles.
+*   **1.5. Technology Stack**
+    *   A definitive list of all technologies, frameworks, and key packages that will be used.
+
+**Part 2: The Integrated Development Plan & Progress Log**
+
+*   **Day 1: Project Foundation & Authentication**
+    *   **The Plan:**
+        *   **Goal:** To lay the cornerstone of the application by initializing the project, scaffolding the complete architecture, and building a secure, beautiful, and fully functional authentication experience.
+        *   **Detailed Rationale:** Authentication is the gateway to the app. Getting it right on Day 1 is critical for security and for setting the standard for quality for the rest of the project. We will build the full flow, not just a placeholder.
+        *   **Step-by-Step Implementation Guide:**
+            1.  Run `flutter create .` to initialize the project.
+            2.  Delete the default `lib` folder.
+            3.  Run a shell script to create the entire, detailed folder structure as defined in the Manifesto.
+            4.  Create the UI for the Login, Signup, and Forgot Password screens, paying close attention to the Design System.
+            5.  Set up a new Firebase project and configure Firebase Authentication for Email/Password and Google Sign-In.
+            6.  Implement the `AuthRepository` with all necessary methods.
+            7.  Implement the `authProvider` using Riverpod to manage the user's authentication state.
+            8.  Connect the UI to the provider and implement the full logic, including loading states and user-friendly error handling.
+        *   **Data Models:** The exact `User` class definition.
+        *   **State Management:** The specific Riverpod providers to be created.
+        *   **UI/UX Mockup Description:** A detailed textual wireframe of the authentication screens.
+        *   **Testing Checklist:** A list of unit and widget tests to be written.
+    *   **The Log:**
+        *   **Status:** `Not Started`
+        *   **Date Started:** `TBD`
+        *   **Date Completed:** `TBD`
+        *   **Notes & Decisions:** (This will be filled in as we work)
+
+---
+
+**Day 2: Core App Structure & Main Admin Dashboard**
+
+*   **The Plan:**
+    *   **Goal:** To build the application's main skeleton, including navigation and theming, and to construct the Main Admin's "Bento Grid" command center, making it visually impressive and data-ready.
+    *   **Detailed Rationale:** With authentication in place, we need a home for our users. This step builds the core navigation and visual theme that will define the app's feel. The Main Admin dashboard is the first major feature, and its implementation will set the standard for all subsequent feature development.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Create the App Shell:** In `app.dart`, create the main `MaterialApp` widget.
+        2.  **Define the Theme:** In `lib/shared/theme/`, create `app_theme.dart`. Define the color scheme, typography, and default styles for widgets like `AppBar` and `Card` to match our Design System.
+        3.  **Implement the Router:** In `router.dart`, create a `generateRoute` function. This will handle all navigation logic. Define routes for `/login`, `/main-admin-dashboard`, etc.
+        4.  **Build the Dashboard Screen:** Create `main_admin_dashboard_screen.dart`. Use the `flutter_staggered_grid_view` package to implement the Bento Grid layout.
+        5.  **Create Bento Cards:** Build individual, reusable widgets for each dashboard card (e.g., `LiveMetricsCard.dart`, `RecentActivityCard.dart`). These will be stateless for now.
+        6.  **Create Placeholder Data Service:** Create a file `lib/core/services/placeholder_data_service.dart` that returns hardcoded data for the dashboard to consume.
+        7.  **Connect UI to Data:** Use a Riverpod `FutureProvider` to fetch the placeholder data and display it in the dashboard widgets, handling loading and error states gracefully.
+    *   **Data Models:** `MainAdminDashboardData`, `LiveMetrics`, `RecentActivityItem`.
+    *   **State Management:** A `mainAdminDashboardDataProvider` (FutureProvider) to fetch the dashboard data.
+    *   **UI/UX Mockup Description:** A full-screen view with a dark sidebar and a main content area. The content area is a 2x3 grid of cards of varying sizes. The top-left card is a large hero graph. Other cards show key numbers with icons, a list of recent sign-ups, and a map.
+    *   **Testing Checklist:** Widget tests for the dashboard screen and for each individual Bento card. Unit test for the placeholder data service.
+
+---
+
+**Day 3: Main Admin - Tenant & Subscription Management**
+
+*   **The Plan:**
+    *   **Goal:** To empower the Main Admin with the tools to manage schools (tenants) and control their access to features via a subscription system.
+    *   **Detailed Rationale:** This is the core of the SaaS business model. The ability to add, manage, and monetize schools is a foundational requirement for the platform's success.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build Tenant List UI:** Create a new screen `tenant_list_screen.dart`. Display schools in a clean, searchable, paginated data table. Each row will have "Edit" and "Suspend" buttons.
+        2.  **Build Tenant Detail/Edit UI:** Create `tenant_detail_screen.dart`. This will be a form to edit school details and, crucially, to change their subscription plan via a dropdown.
+        3.  **Build Subscription Management UI:** Create `subscription_management_screen.dart`. This screen will allow the Main Admin to define subscription tiers (e.g., "Basic", "Premium") and use a list of toggle switches to assign features to each tier (Feature Flagging).
+        4.  **Implement Repository:** Create `TenantRepository` and `SubscriptionRepository` in `lib/core/api/`.
+        5.  **Implement Providers:** Create Riverpod providers (`tenantProvider`, `subscriptionProvider`) to manage the state for these features.
+    *   **Data Models:** `School` (or `Tenant`), `SubscriptionPlan`, `FeatureFlag`.
+    *   **State Management:** `tenantsProvider` (to fetch and manage the list of schools), `subscriptionPlansProvider`.
+    *   **UI/UX Mockup Description:** A standard data table view for the tenant list. The subscription management screen will be a series of cards, one for each plan, containing a list of feature toggles.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repositories.
+
+---
+
+**Day 4: School Admin - Dashboard & User Management**
+
+*   **The Plan:**
+    *   **Goal:** To build the School Admin's dashboard and user management features.
+    *   **Detailed Rationale:** This is the first feature set for the School Admin, and it's critical for them to be able to manage their users effectively.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build the Dashboard Screen:** Create `school_admin_dashboard_screen.dart` with a Bento Grid layout.
+        2.  **Build User Management UI:** Create `user_management_screen.dart` with a searchable data table of users.
+        3.  **Build Add/Edit User UI:** Create `add_edit_user_screen.dart` as a form to add or edit user details.
+        4.  **Implement Bulk Import:** Add a button to the user management screen that opens a file picker. Use the `csv` package to parse the selected file and add the users to the database.
+        5.  **Implement Repositories:** Create `SchoolAdminRepository`.
+        6.  **Implement Providers:** Create `schoolAdminDashboardDataProvider`, `usersProvider`.
+    *   **Data Models:** `SchoolAdminDashboardData`, `User`.
+    *   **State Management:** `schoolAdminDashboardDataProvider`, `usersProvider`.
+    *   **UI/UX Mockup Description:** The dashboard is a Bento Grid with cards for attendance stats, pending fees, and quick actions. The user management screen is a clean data table with a prominent "Add User" button.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repository and the CSV parsing logic.
+
+---
+
+**Day 5: School Admin - Academics & Customization**
+
+*   **The Plan:**
+    *   **Goal:** To enable School Admins to set up academic years and customize their school's appearance.
+    *   **Detailed Rationale:** These features are essential for the initial setup of a new school on the platform.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build New Year Setup Wizard:** Create a multi-step wizard to guide the School Admin through the process of promoting students, adding new admissions, and assigning teachers.
+        2.  **Build Academics Setup UI:** Create screens for managing classes, sections, and subjects.
+        3.  **Build School Customization UI:** Create a screen where the School Admin can upload a logo and select a primary color for their school's theme.
+        4.  **Implement Repositories:** Create `AcademicsRepository`, `CustomizationRepository`.
+        5.  **Implement Providers:** Create `academicsProvider`, `customizationProvider`.
+    *   **Data Models:** `AcademicYear`, `Class`, `Section`, `Subject`.
+    *   **State Management:** `academicsProvider`, `customizationProvider`.
+    *   **UI/UX Mockup Description:** The wizard will be a full-screen modal with a progress bar at the top. The customization screen will have a live preview of the changes.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repositories.
+
+---
+
+**Day 6: Teacher - Dashboard & Classroom Hub (Assignments)**
+
+*   **The Plan:**
+    *   **Goal:** To build the Teacher's dashboard and the core assignment workflow.
+    *   **Detailed Rationale:** This is the heart of the LMS. The assignment workflow needs to be seamless and intuitive for teachers.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build Teacher Dashboard:** Create `teacher_dashboard_screen.dart` with a "Today's Agenda" view.
+        2.  **Build Classroom Hub UI:** Create `classroom_hub_screen.dart` with tabs for Assignments, Quizzes, etc.
+        3.  **Build Create/Edit Assignment UI:** Create `create_edit_assignment_screen.dart` with fields for title, description, due date, and file attachments.
+        4.  **Build Grading UI:** Create `grading_screen.dart` with a split view showing the student's submission on one side and the grading panel on the other.
+        5.  **Implement Repositories:** Create `TeacherRepository`.
+        6.  **Implement Providers:** Create `teacherDashboardDataProvider`, `assignmentsProvider`.
+    *   **Data Models:** `TeacherDashboardData`, `Assignment`, `Submission`, `Grade`.
+    *   **State Management:** `teacherDashboardDataProvider`, `assignmentsProvider`.
+    *   **UI/UX Mockup Description:** The dashboard is a simple, single-column list of today's events. The Classroom Hub uses clean tabs for navigation. The grading screen is designed for efficiency.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repository.
+
+---
+
+**Day 7: Teacher - Attendance & Communication**
+
+*   **The Plan:**
+    *   **Goal:** To build the attendance and communication features for teachers.
+    *   **Detailed Rationale:** These features are essential for classroom management and parent-teacher communication.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build Attendance UI:** Create `attendance_screen.dart` with a grid of student photos. The teacher can tap on a photo to mark the student as present, absent, or late.
+        2.  **Build Communication UI:** Create `communication_screen.dart` with a list of conversations. The teacher can start a new conversation with a student, a parent, or an entire class.
+        3.  **Implement Repositories:** Create `AttendanceRepository`, `CommunicationRepository`.
+        4.  **Implement Providers:** Create `attendanceProvider`, `communicationProvider`.
+    *   **Data Models:** `AttendanceRecord`, `Conversation`, `Message`.
+    *   **State Management:** `attendanceProvider`, `communicationProvider`.
+    *   **UI/UX Mockup Description:** The attendance screen is highly visual and optimized for quick data entry. The communication screen is a familiar chat interface.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repositories.
+
+---
+
+**Day 8: Student - Dashboard & "My Work"**
+
+*   **The Plan:**
+    *   **Goal:** To build the Student's dashboard and the "My Work" section.
+    *   **Detailed Rationale:** This is the student's primary interface with the app. It needs to be simple, clear, and engaging.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build Student Dashboard:** Create `student_dashboard_screen.dart` with a "To-Do" list view of upcoming assignments and events.
+        2.  **Build "My Work" UI:** Create `my_work_screen.dart` with a list of all assignments, their due dates, and their grades.
+        3.  **Build Submission UI:** Create `submission_screen.dart` where the student can upload their work for an assignment.
+        4.  **Implement Repositories:** Create `StudentRepository`.
+        5.  **Implement Providers:** Create `studentDashboardDataProvider`, `myWorkProvider`.
+    *   **Data Models:** `StudentDashboardData`, `Assignment`.
+    *   **State Management:** `studentDashboardDataProvider`, `myWorkProvider`.
+    *   **UI/UX Mockup Description:** The dashboard is a simple, card-based to-do list. "My Work" is a clean, filterable list.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repository.
+
+---
+
+**Day 9: Parent - Dashboard & Payments**
+
+*   **The Plan:**
+    *   **Goal:** To build the Parent's consolidated dashboard and the fee payment feature.
+    *   **Detailed Rationale:** The parent dashboard is a key feature for engaging parents in their child's education. The payment feature is a critical revenue driver for the schools.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Build Parent Dashboard:** Create `parent_dashboard_screen.dart` with a child selector at the top. The dashboard will show a consolidated feed of updates for the selected child.
+        2.  **Build Payments UI:** Create `payments_screen.dart` with a list of outstanding fees. The parent can select a fee and pay it using a placeholder for a payment gateway.
+        3.  **Implement Repositories:** Create `ParentRepository`.
+        4.  **Implement Providers:** Create `parentDashboardDataProvider`, `paymentsProvider`.
+    *   **Data Models:** `ParentDashboardData`, `Fee`.
+    *   **State Management:** `parentDashboardDataProvider`, `paymentsProvider`.
+    *   **UI/UX Mockup Description:** The dashboard is a feed of cards, similar to a social media app. The payments screen is a simple, clear list of invoices.
+    *   **Testing Checklist:** Widget tests for all new screens. Unit tests for the new repository.
+
+---
+
+**Day 10: Final Touches & Refinements**
+
+*   **The Plan:**
+    *   **Goal:** To polish the UI, fix bugs, and prepare for deployment.
+    *   **Detailed Rationale:** This is the final step before releasing the app. It's important to take the time to ensure that the app is polished and bug-free.
+    *   **Step-by-Step Implementation Guide:**
+        1.  **Review and Refine UI/UX:** Go through the entire app and look for areas where the UI/UX can be improved.
+        2.  **Add Animations and Transitions:** Add subtle animations and transitions to make the app feel more polished and engaging.
+        3.  **Perform Thorough Testing:** Test the app on a variety of devices and screen sizes to ensure that it works correctly everywhere.
+        4.  **Prepare for Deployment:** Follow the instructions in the Flutter documentation to prepare the app for release on the App Store and Google Play.
+    *   **Testing Checklist:** End-to-end testing of all major features.
