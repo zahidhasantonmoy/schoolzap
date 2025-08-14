@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:animated_gradient/animated_gradient.dart';
 
@@ -8,13 +7,12 @@ class AnimatedBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedGradient(
-      colors: [
-        Colors.deepPurple.shade400,
-        Colors.purple.shade400,
-        Colors.deepPurple.shade800,
-        Colors.purple.shade800,
+      colors: const [
+        Colors.deepPurple,
+        Colors.purple,
+        Colors.deepPurpleAccent,
+        Colors.purpleAccent,
       ],
-      duration: const Duration(seconds: 5),
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     );
