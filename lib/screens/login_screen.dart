@@ -1,5 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback showSignUpScreen;
@@ -33,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade200, Colors.blue.shade800],
+            colors: [Colors.deepPurple.shade400, Colors.deepPurple.shade800],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -45,36 +48,76 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'SchoolZap',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  PlayAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(seconds: 1),
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: child,
+                      );
+                    },
+                    child: Text(
+                      'SchoolZap',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 50),
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.8),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  PlayAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 500),
+                    delay: const Duration(milliseconds: 500),
+                    builder: (context, value, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 50 * (1 - value)),
+                        child: Opacity(
+                          opacity: value,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: const Icon(Icons.email),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.8),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  PlayAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 500),
+                    delay: const Duration(milliseconds: 700),
+                    builder: (context, value, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 50 * (1 - value)),
+                        child: Opacity(
+                          opacity: value,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),
@@ -85,22 +128,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: const TextStyle(color: Colors.red),
                     ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  PlayAnimationBuilder<double>(
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 500),
+                    delay: const Duration(milliseconds: 900),
+                    builder: (context, value, child) {
+                      return Transform.scale(
+                        scale: value,
+                        child: child,
+                      );
+                    },
+                    child: ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
+                      child: const Text('Login'),
                     ),
-                    child: const Text('Login'),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
                     onPressed: widget.showSignUpScreen,
-                    child: const Text(
+                    child: Text(
                       'Don\'t have an account? Sign up',
-                      style: TextStyle(color: Colors.white),
+                      style: GoogleFonts.montserrat(color: Colors.white),
                     ),
                   ),
                 ],
