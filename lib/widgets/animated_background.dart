@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:animate_gradient/animate_gradient.dart';
 
@@ -17,8 +16,10 @@ class AnimatedBackground extends StatelessWidget {
         Colors.purpleAccent,
       ],
       duration: const Duration(seconds: 5),
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
+      primaryBegin: Alignment.topLeft,
+      primaryEnd: Alignment.bottomRight,
+      secondaryBegin: Alignment.bottomLeft,
+      secondaryEnd: Alignment.topRight,
     );
   }
 }
