@@ -1,13 +1,7 @@
-- Initialized Git repository.
-- Created directory structure: lib/auth, lib/models, lib/screens, lib/services, lib/utils, lib/widgets.
-- Committed directory structure.
-- Created lib/auth/auth_gate.dart.
-- Committed lib/auth/auth_gate.dart.
-- Created lib/screens/login_screen.dart.
-- Committed lib/screens/login_screen.dart.
-- Created lib/screens/home_screen.dart.
-- Committed lib/screens/home_screen.dart.
-- Modified lib/main.dart to use AuthGate.
-- Added firebase_core and firebase_auth dependencies to pubspec.yaml.
-- Ran flutter pub get.
-- Committed changes to lib/main.dart and pubspec.yaml.
+
+
+Next Plan (Day 2 - Core Features):
+1. User Profile Management: Implement a basic user profile screen with data fetching from Firebase.
+2. Navigation and Routing: Set up a robust navigation system (e.g., GoRouter) with a bottom navigation bar or drawer.
+3. Basic Data Display: Display dummy school-related data on the home screen.
+4. Error Handling and User Feedback: Enhance error handling and user feedback mechanisms.
