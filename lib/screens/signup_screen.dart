@@ -1,22 +1,31 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  final VoidCallback showSignUpScreen;
-  const LoginScreen({super.key, required this.showSignUpScreen});
+class SignUpScreen extends StatefulWidget {
+  final VoidCallback showLoginScreen;
+  const SignUpScreen({super.key, required this.showLoginScreen});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   String _errorMessage = '';
 
-  Future<void> _login() async {
+  Future<void> _signUp() async {
+    if (_passwordController.text.trim() != _confirmPasswordController.text.trim()) {
+      setState(() {
+        _errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
+
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -78,6 +87,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.8),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   if (_errorMessage.isNotEmpty)
                     Text(
@@ -86,20 +108,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _login,
+                    onPressed: _signUp,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Login'),
+                    child: const Text('Sign Up'),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
-                    onPressed: widget.showSignUpScreen,
+                    onPressed: widget.showLoginScreen,
                     child: const Text(
-                      'Don\'t have an account? Sign up',
+                      'Already have an account? Login',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
