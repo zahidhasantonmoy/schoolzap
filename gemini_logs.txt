@@ -1,7 +1,24 @@
-
-
 Next Plan (Day 2 - Core Features):
 1. User Profile Management: Implement a basic user profile screen with data fetching from Firebase.
 2. Navigation and Routing: Set up a robust navigation system (e.g., GoRouter) with a bottom navigation bar or drawer.
 3. Basic Data Display: Display dummy school-related data on the home screen.
 4. Error Handling and User Feedback: Enhance error handling and user feedback mechanisms.
+
+--- Day 2 Summary ---
+- Created new directories: lib/shared/theme/
+- Created new files: lib/shared/theme/app_theme.dart, lib/router.dart, lib/screens/main_admin_dashboard_screen.dart, lib/widgets/live_metrics_card.dart, lib/widgets/recent_activity_card.dart, lib/services/placeholder_data_service.dart, lib/models/main_admin_dashboard_data.dart, lib/models/live_metrics.dart, lib/models/recent_activity_item.dart, lib/providers/main_admin_dashboard_provider.dart
+- Added flutter_staggered_grid_view and flutter_riverpod dependencies to pubspec.yaml.
+- Ran flutter pub get.
+- Implemented data models, placeholder data service, Riverpod provider, theme, router, and UI for the main admin dashboard.
+- Updated main.dart to use the new theme and router.
+- Fixed compilation errors related to router.dart, app_theme.dart, and main_admin_dashboard_screen.dart.
+- Ran the app successfully.
+
+--- Day 3 Summary ---
+- Created new data models: lib/models/school.dart, lib/models/subscription_plan.dart, lib/models/feature_flag.dart
+- Created new screens: lib/screens/tenant_list_screen.dart, lib/screens/tenant_detail_screen.dart, lib/screens/subscription_management_screen.dart
+- Created new directories: lib/core/api/
+- Created new repositories: lib/core/api/tenant_repository.dart, lib/core/api/subscription_repository.dart
+- Created new providers: lib/providers/tenant_provider.dart, lib/providers/subscription_provider.dart
+- Committed each file change as requested.
+- Ran the app successfully.

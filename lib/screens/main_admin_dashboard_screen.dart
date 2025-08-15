@@ -20,20 +20,22 @@ class MainAdminDashboardScreen extends ConsumerWidget {
         data: (data) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: StaggeredGridView.countBuilder(
+            child: StaggeredGrid.count(
               crossAxisCount: 4,
-              itemCount: 2,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return LiveMetricsCard(liveMetrics: data.liveMetrics);
-                } else {
-                  return RecentActivityCard(recentActivity: data.recentActivity);
-                }
-              },
-              staggeredTileBuilder: (int index) =>
-                  StaggeredTile.count(2, index.isEven ? 2 : 1),
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              children: [
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 2,
+                  mainAxisCellCount: 2,
+                  child: LiveMetricsCard(liveMetrics: data.liveMetrics),
+                ),
+                StaggeredGridTile.count(
+                  crossAxisCellCount: 2,
+                  mainAxisCellCount: 1,
+                  child: RecentActivityCard(recentActivity: data.recentActivity),
+                ),
+              ],
             ),
           );
         },
