@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:schoolzap/auth/auth_gate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:schoolzap/router.dart';
+import 'package:schoolzap/shared/theme/app_theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -8,7 +10,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,13 +18,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Schoolzap',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const AuthGate(),
+      theme: AppTheme.theme,
+      routerConfig: router,
     );
   }
 }
