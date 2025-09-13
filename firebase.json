@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"schoolzap-aa207","appId":"1:595917480413:android:8f65ab53426573164b1634","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"schoolzap-aa207","configurations":{"android":"1:595917480413:android:8f65ab53426573164b1634","ios":"1:595917480413:ios:79da775a7fbf255b4b1634","macos":"1:595917480413:ios:79da775a7fbf255b4b1634","web":"1:595917480413:web:5ece711e2e2ed7124b1634","windows":"1:595917480413:web:7920b1d4f005660c4b1634"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "schoolzap-2024",
+          "appId": "1:103000000000:android:xxxxxxxxxxxxxxxxxxxx",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "schoolzap-2024",
+          "appId": "1:103000000000:ios:xxxxxxxxxxxxxxxxxxxx",
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "schoolzap-2024",
+          "appId": "1:103000000000:ios:xxxxxxxxxxxxxxxxxxxx",
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "web": {
+        "default": {
+          "projectId": "schoolzap-2024",
+          "appId": "1:103000000000:web:xxxxxxxxxxxxxxxxxxxx",
+          "measurementId": "G-XXXXXXXXXX",
+          "fileOutput": "lib/firebase_options.dart"
+        }
+      }
+    }
+  }
+}

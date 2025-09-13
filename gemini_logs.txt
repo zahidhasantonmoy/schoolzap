@@ -22,3 +22,102 @@ Next Plan (Day 2 - Core Features):
 - Created new providers: lib/providers/tenant_provider.dart, lib/providers/subscription_provider.dart
 - Committed each file change as requested.
 - Ran the app successfully.
+
+--- Day 4 Summary ---
+- Created new data models: lib/models/user.dart, lib/models/school_admin_dashboard_data.dart
+- Created new screens: lib/screens/school_admin_dashboard_screen.dart, lib/screens/user_management_screen.dart, lib/screens/add_edit_user_screen.dart
+- Created new repository: lib/core/api/school_admin_repository.dart
+- Created new providers: lib/providers/school_admin_dashboard_provider.dart, lib/providers/users_provider.dart
+- Committed each file change.
+
+--- Day 5 Summary ---
+- Created new data models: lib/models/academic_year.dart, lib/models/class.dart, lib/models/section.dart, lib/models/subject.dart
+- Created new screens: lib/screens/new_year_setup_wizard.dart, lib/screens/academics_setup_screen.dart, lib/screens/school_customization_screen.dart
+- Created new repositories: lib/core/api/academics_repository.dart, lib/core/api/customization_repository.dart
+- Created new providers: lib/providers/academics_provider.dart, lib/providers/customization_provider.dart
+- Committed each file change.
+
+--- Day 6 Summary ---
+- Created new data models: lib/models/teacher_dashboard_data.dart, lib/models/assignment.dart, lib/models/submission.dart, lib/models/grade.dart
+- Created new screens: lib/screens/teacher_dashboard_screen.dart, lib/screens/classroom_hub_screen.dart, lib/screens/create_edit_assignment_screen.dart, lib/screens/grading_screen.dart
+- Created new repository: lib/core/api/teacher_repository.dart
+- Created new providers: lib/providers/teacher_dashboard_provider.dart, lib/providers/assignments_provider.dart
+- Committed each file change.
+
+--- Day 7 Summary ---
+- Created new data models: lib/models/attendance_record.dart, lib/models/conversation.dart, lib/models/message.dart
+- Created new screens: lib/screens/attendance_screen.dart, lib/screens/communication_screen.dart
+- Created new repositories: lib/core/api/attendance_repository.dart, lib/core/api/communication_repository.dart
+- Created new providers: lib/providers/attendance_provider.dart, lib/providers/communication_provider.dart
+- Committed each file change.
+
+--- Day 8 Summary ---
+- Created new data models: lib/models/student_dashboard_data.dart
+- Created new screens: lib/screens/student_dashboard_screen.dart, lib/screens/my_work_screen.dart, lib/screens/submission_screen.dart
+- Created new repository: lib/core/api/student_repository.dart
+- Created new providers: lib/providers/student_dashboard_provider.dart, lib/providers/my_work_provider.dart
+- Committed each file change.
+
+--- Day 9 Summary ---
+- Created new data models: lib/models/parent_dashboard_data.dart, lib/models/fee.dart
+- Created new screens: lib/screens/parent_dashboard_screen.dart, lib/screens/payments_screen.dart
+- Created new repository: lib/core/api/parent_repository.dart
+- Created new providers: lib/providers/parent_dashboard_provider.dart, lib/providers/payments_provider.dart
+- Committed each file change.
+
+--- AuthGate Modification and Role-Based Testing Instructions ---
+- Modified lib/auth/auth_gate.dart to implement role-based redirection using Firestore to fetch user roles.
+- Provided detailed step-by-step instructions on:
+    - Creating user accounts in Firebase Authentication.
+    - Adding user roles to Firestore.
+    - Deploying Firestore Security Rules for role-based access.
+    - Testing the app for different roles.
+Okay, here's a step-by-step guide to test role-based access in your app:
+
+  Part 1: Prepare Your Firebase Project
+
+   1. Create User Accounts in Firebase Authentication:
+       * Option A (Via App): Run your Flutter app, go to the signup screen, and create accounts for each role
+         (e.g., main_admin@example.com, school_admin@example.com, teacher@example.com, student@example.com,
+         parent@example.com).
+       * Option B (Via Firebase Console): Go to Firebase Console -> Authentication -> Users -> "Add user".
+         Create accounts with email and password.
+       * Important: For each user created, note down their User UID (User ID) from the Firebase Console.
+
+   2. Add User Roles to Firestore:
+       * Go to Firebase Console -> Firestore Database.
+       * Create a new collection named users.
+       * For each user created in Step 1:
+           * Click "Add document".
+           * Set the Document ID to the User UID you noted down.
+           * Add a field: Field name: role, Field type: string, Field value: [the role, e.g., 'main_admin'].
+           * Click "Save".
+       * Repeat for all your test users (main\_admin, school\_admin, teacher, student, parent).
+
+   3. Deploy Firestore Security Rules:
+       * Open the firestore.rules file in your project's root directory.
+       * Replace its content with the example rules I provided previously (or your own adapted rules for
+         role-based access).
+       * Open your terminal in the project's root directory.
+       * Run the command: firebase deploy --only firestore:rules
+       * This will upload your security rules to Firebase.
+
+  Part 2: Test the App
+
+   1. Run Your Flutter App:
+       * Open your terminal in the project's root directory.
+       * Run the command: flutter run -d chrome (or your preferred device).
+
+   2. Perform Role-Based Testing:
+       * Once the app launches, you will be at the login/signup screen.
+       * Login as Main Admin: Enter the email and password for your main_admin test account.
+           * Expected: You should be redirected to the MainAdminDashboardScreen.
+           * Test: Verify that you can access/see elements intended for the main admin.
+       * Logout: Implement a logout button in your app (if not already present) or clear app data in your
+         browser/emulator.
+       * Login as School Admin: Enter the email and password for your school_admin test account.
+           * Expected: You should be redirected to the SchoolAdminDashboardScreen.
+           * Test: Verify its functionalities.
+       * Repeat for all other roles: Log in as teacher, student, and parent accounts, verifying that each is
+         redirected to their respective dashboard (TeacherDashboardScreen, StudentDashboardScreen,
+         ParentDashboardScreen) and that their specific functionalities work as expected.
