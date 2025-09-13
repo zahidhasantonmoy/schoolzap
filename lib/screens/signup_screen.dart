@@ -1,21 +1,27 @@
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:schoolzap/providers/auth_provider.dart';
+import 'package:schoolzap/shared/widgets/custom_button.dart';
+import 'package:schoolzap/shared/widgets/custom_text_field.dart';
 import 'package:schoolzap/widgets/animated_background.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   final VoidCallback showLoginScreen;
   const SignUpScreen({super.key, required this.showLoginScreen});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderStateMixin {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> with SingleTickerProviderStateMixin {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _roleController = TextEditingController();
+  bool _isLoading = false;
   String _errorMessage = '';
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -34,10 +40,26 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
   @override
   void dispose() {
     _animationController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _roleController.dispose();
     super.dispose();
   }
 
   Future<void> _signUp() async {
+    if (_nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty ||
+        _roleController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please fill in all fields.';
+      });
+      return;
+    }
+
     if (_passwordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
       setState(() {
@@ -46,15 +68,29 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final authService = ref.read(authServiceProvider);
+      await authService.signUpWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+        name: _nameController.text.trim(),
+        role: _roleController.text.trim(),
       );
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       setState(() {
-        _errorMessage = e.message ?? 'An unknown error occurred.';
+        _errorMessage = e.toString().replaceAll('Exception:', '').trim();
       });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -81,46 +117,39 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height: 50),
-                      TextField(
+                      const SizedBox(height: 30),
+                      CustomTextField(
+                        controller: _nameController,
+                        labelText: 'Full Name',
+                        prefixIcon: Icons.person,
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: const Icon(Icons.email),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                        labelText: 'Email',
+                        prefixIcon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 20),
-                      TextField(
+                      CustomTextField(
                         controller: _passwordController,
+                        labelText: 'Password',
+                        prefixIcon: Icons.lock,
                         obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: const Icon(Icons.lock),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
                       ),
                       const SizedBox(height: 20),
-                      TextField(
+                      CustomTextField(
                         controller: _confirmPasswordController,
+                        labelText: 'Confirm Password',
+                        prefixIcon: Icons.lock,
                         obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm Password',
-                          prefixIcon: const Icon(Icons.lock),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                        controller: _roleController,
+                        labelText: 'Role (main_admin, school_admin, teacher, student, parent)',
+                        prefixIcon: Icons.work,
+                        helperText: 'Enter one of: main_admin, school_admin, teacher, student, parent',
                       ),
                       const SizedBox(height: 10),
                       if (_errorMessage.isNotEmpty)
@@ -129,38 +158,10 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                           style: const TextStyle(color: Colors.red),
                         ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _signUp,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                        ).copyWith(
-                          elevation: MaterialStateProperty.all(0),
-                          overlayColor: MaterialStateProperty.all(Colors.white.withOpacity(0.1)),
-                        ),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.purple.shade600, Colors.purple.shade900],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                      CustomButton(
+                        onPressed: _isLoading ? () {} : _signUp,
+                        text: 'Sign Up',
+                        isLoading: _isLoading,
                       ),
                       const SizedBox(height: 20),
                       TextButton(

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:schoolzap/providers/auth_provider.dart';
+import 'package:schoolzap/shared/widgets/custom_button.dart';
+import 'package:schoolzap/shared/widgets/custom_text_field.dart';
 import 'package:schoolzap/widgets/animated_background.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   final VoidCallback showSignUpScreen;
   const LoginScreen({super.key, required this.showSignUpScreen});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
   String _errorMessage = '';
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -32,19 +36,40 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   @override
   void dispose() {
     _animationController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-    } on FirebaseAuthException catch (e) {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
-        _errorMessage = e.message ?? 'An unknown error occurred.';
+        _errorMessage = 'Please enter both email and password.';
       });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    try {
+      final authService = ref.read(authServiceProvider);
+      await authService.signInWithEmailAndPassword(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString().replaceAll('Exception:', '').trim();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -72,31 +97,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ),
                       ),
                       const SizedBox(height: 50),
-                      TextField(
+                      CustomTextField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: const Icon(Icons.email),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                        labelText: 'Email',
+                        prefixIcon: Icons.email,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 20),
-                      TextField(
+                      CustomTextField(
                         controller: _passwordController,
+                        labelText: 'Password',
+                        prefixIcon: Icons.lock,
                         obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: const Icon(Icons.lock),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.8),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
                       ),
                       const SizedBox(height: 10),
                       if (_errorMessage.isNotEmpty)
@@ -105,43 +117,26 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           style: const TextStyle(color: Colors.red),
                         ),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                        ).copyWith(
-                          elevation: MaterialStateProperty.all(0),
-                          overlayColor: MaterialStateProperty.all(Colors.white.withOpacity(0.1)),
-                        ),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.purple.shade600, Colors.purple.shade900],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                      CustomButton(
+                        onPressed: _isLoading ? () {} : _login,
+                        text: 'Login',
+                        isLoading: _isLoading,
                       ),
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: widget.showSignUpScreen,
                         child: Text(
                           'Don\'t have an account? Sign up',
+                          style: GoogleFonts.montserrat(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () {
+                          // TODO: Implement forgot password functionality
+                        },
+                        child: Text(
+                          'Forgot Password?',
                           style: GoogleFonts.montserrat(color: Colors.white),
                         ),
                       ),
