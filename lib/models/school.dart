@@ -1,13 +1,17 @@
 class School {
   final String id;
   final String name;
-  final String adminId;
-  final String subscriptionPlanId;
+  final String domain;
+  final String subscriptionPlan;
+  final String status;
+  final DateTime createdAt;
 
   School({
     required this.id,
     required this.name,
-    required this.adminId,
-    required this.subscriptionPlanId,
+    required this.domain,
+    required this.subscriptionPlan,
+    required this.status,
+    required this.createdAt,
   });
 }
