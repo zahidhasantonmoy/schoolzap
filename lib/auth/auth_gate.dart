@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:schoolzap/providers/auth_provider.dart';
 import 'package:schoolzap/screens/home_screen.dart';
 import 'package:schoolzap/screens/login_screen.dart';
 import 'package:schoolzap/screens/signup_screen.dart';
@@ -10,14 +11,14 @@ import 'package:schoolzap/screens/teacher_dashboard_screen.dart';
 import 'package:schoolzap/screens/student_dashboard_screen.dart';
 import 'package:schoolzap/screens/parent_dashboard_screen.dart';
 
-class AuthGate extends StatefulWidget {
+class AuthGate extends ConsumerStatefulWidget {
   const AuthGate({super.key});
 
   @override
-  State<AuthGate> createState() => _AuthGateState();
+  ConsumerState<AuthGate> createState() => _AuthGateState();
 }
 
-class _AuthGateState extends State<AuthGate> {
+class _AuthGateState extends ConsumerState<AuthGate> {
   bool showLoginScreen = true;
 
   void toggleScreens() {
@@ -28,22 +29,16 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance.collection('users').doc(snapshot.data!.uid).get(),
-            builder: (context, userSnapshot) {
-              if (userSnapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(body: Center(child: CircularProgressIndicator()));
-              }
-              if (userSnapshot.hasError) {
-                return const Scaffold(body: Center(child: Text('Error fetching user role')));
-              }
-              if (userSnapshot.hasData && userSnapshot.data!.exists) {
-                final userRole = userSnapshot.data!['role'];
-                switch (userRole) {
+    final authState = ref.watch(authStateChangesProvider);
+
+    return authState.when(
+      data: (user) {
+        if (user != null) {
+          final currentUser = ref.watch(currentUserProvider);
+          return currentUser.when(
+            data: (appUser) {
+              if (appUser != null) {
+                switch (appUser.role) {
                   case 'main_admin':
                     return const MainAdminDashboardScreen();
                   case 'school_admin':
@@ -60,6 +55,8 @@ class _AuthGateState extends State<AuthGate> {
               }
               return const HomeScreen(); // Fallback if user data doesn't exist
             },
+            loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+            error: (error, stackTrace) => const Scaffold(body: Center(child: Text('Error fetching user data'))),
           );
         } else {
           if (showLoginScreen) {
@@ -69,6 +66,8 @@ class _AuthGateState extends State<AuthGate> {
           }
         }
       },
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (error, stackTrace) => const Scaffold(body: Center(child: Text('Error with authentication'))),
     );
   }
 }
